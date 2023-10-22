@@ -1,0 +1,193 @@
+definitions:
+  entity.CreateHuman:
+    properties:
+      name:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    required:
+    - name
+    - surname
+    type: object
+  entity.Human:
+    properties:
+      age:
+        type: integer
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      nation:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
+  entity.UpdateHuman:
+    properties:
+      name:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
+  v1.response:
+    properties:
+      error:
+        example: message
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /humans/:
+    get:
+      consumes:
+      - application/json
+      description: Return all humans by given filters
+      operationId: getHumans
+      parameters:
+      - description: filter by gender
+        in: query
+        name: gender
+        type: string
+      - description: filter by minimal age
+        in: query
+        name: ageMin
+        type: integer
+      - description: filter by maximum age
+        in: query
+        name: ageMax
+        type: integer
+      - description: filter by nation
+        in: query
+        name: nation
+        type: string
+      - description: default 1
+        in: query
+        name: page
+        type: integer
+      - description: default 10
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Human'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Return humans
+      tags:
+      - humans
+    post:
+      consumes:
+      - application/json
+      description: Create human with given info
+      operationId: createHuman
+      parameters:
+      - description: human data
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CreateHuman'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Human'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Create human
+      tags:
+      - humans
+  /humans/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete human by give ID
+      operationId: deleteHuman
+      parameters:
+      - description: Human ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Delete human
+      tags:
+      - humans
+    put:
+      consumes:
+      - application/json
+      description: Update human by give ID and updated data
+      operationId: updateHuman
+      parameters:
+      - description: new human data
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UpdateHuman'
+      - description: Human ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Human'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Update human
+      tags:
+      - humans
+swagger: "2.0"
